@@ -47,16 +47,8 @@ export async function generateBusinessNames(niche: string): Promise<NameGenerati
   const userPrompt = `My business niche is: "${niche}"`;
 
   try {
-    // FIX: In a Vite application, environment variables exposed to the client MUST start with VITE_
-    // and be accessed via `import.meta.env`.
-    const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-    if (!apiKey) {
-      // This error will be caught by the catch block below and re-thrown as a more user-friendly error.
-      throw new Error('API key is missing or invalid. Please ensure VITE_GEMINI_API_KEY is set in your environment.');
-    }
-
-    // Initialize the AI client here, just before it's needed.
-    const ai = new GoogleGenAI({ apiKey });
+    // FIX: Per coding guidelines, the API key must be obtained from process.env.API_KEY.
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash',
