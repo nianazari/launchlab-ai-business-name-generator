@@ -1,11 +1,8 @@
-// FIX: The reference to "vite/client" was causing a "Cannot find type definition file" error. This line has been removed.
-// The application was updated to use `process.env.API_KEY` to align with the coding guidelines, so the previous
-// type definitions for `import.meta.env` are no longer needed.
-// A global `process` type is declared to make `process.env.API_KEY` available to TypeScript.
-
-declare var process: {
-  env: {
+// FIX: The original `declare var process` caused a "Cannot redeclare block-scoped variable 'process'" error.
+// The correct way to add types to `process.env` is by augmenting the existing `NodeJS.ProcessEnv` interface.
+// This makes `process.env.API_KEY` available to TypeScript without conflicts.
+declare namespace NodeJS {
+  interface ProcessEnv {
     API_KEY: string;
-    [key: string]: string | undefined;
-  };
-};
+  }
+}

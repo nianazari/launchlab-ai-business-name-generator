@@ -50,7 +50,7 @@ export async function generateBusinessNames(niche: string): Promise<NameGenerati
     // Initialize the AI client here, just before it's needed.
     // This prevents a crash on app load if the API key is missing.
     // FIX: Use process.env.API_KEY as per the coding guidelines.
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY! });
 
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash',
