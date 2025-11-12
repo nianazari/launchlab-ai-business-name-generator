@@ -1,10 +1,10 @@
 /// <reference types="vite/client" />
 
-// FIX: The reference to 'node' types was incorrect for this environment.
-// This file is restored to the Vite default and extended with a declaration
-// for `process.env` to support `process.env.API_KEY`, which is injected by Vite.
-declare var process: {
-  env: {
+// FIX: Replaced `declare var process` with an augmentation of the NodeJS.ProcessEnv
+// interface. This prevents the "Cannot redeclare" error and correctly types `process.env`
+// for both client-side code and the vite.config.ts file, resolving type conflicts.
+declare namespace NodeJS {
+  interface ProcessEnv {
     API_KEY: string;
   }
-};
+}

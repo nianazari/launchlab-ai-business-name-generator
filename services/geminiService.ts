@@ -44,12 +44,19 @@ const responseSchema = {
 };
 
 export async function generateBusinessNames(niche: string): Promise<NameGenerationResponse> {
+  const apiKey = process.env.API_KEY;
+  if (!apiKey) {
+    // This guard clause is crucial. It satisfies TypeScript's strict null check,
+    // resolving the build error. It also provides a clear, helpful error message
+    // if the VITE_GEMINI_API_KEY is not set in the Vercel deployment environment.
+    // FIX: Updated error message to refer to the correct environment variable name used in the client-side code.
+    throw new Error("The API_KEY environment variable is not set. Please configure it in your deployment settings.");
+  }
+
   const userPrompt = `My business niche is: "${niche}"`;
 
   try {
-    // FIX: Per coding guidelines, initialize GoogleGenAI directly with `process.env.API_KEY`
-    // and assume the environment variable is correctly configured.
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    const ai = new GoogleGenAI({ apiKey });
 
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash',
