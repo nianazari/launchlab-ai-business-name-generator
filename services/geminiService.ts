@@ -47,10 +47,15 @@ export async function generateBusinessNames(niche: string): Promise<NameGenerati
   const userPrompt = `My business niche is: "${niche}"`;
 
   try {
+    const apiKey = process.env.API_KEY;
+    if (!apiKey) {
+      // This error will be caught by the catch block below and re-thrown as a more user-friendly error.
+      throw new Error('API key is missing or invalid. Please check your environment variables.');
+    }
+
     // Initialize the AI client here, just before it's needed.
     // This prevents a crash on app load if the API key is missing.
-    // FIX: Use process.env.API_KEY as per the coding guidelines.
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY! });
+    const ai = new GoogleGenAI({ apiKey });
 
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash',

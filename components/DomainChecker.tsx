@@ -6,9 +6,7 @@ import { Loader } from './Loader';
 import { ErrorMessage } from './ErrorMessage';
 
 interface DomainCheckerProps {
-  // FIX: Changed type from `string[]` to `unknown[]` to make the component more robust
-  // against potentially malformed API data, which resolves the type error.
-  allNames: unknown[];
+  allNames: string[];
 }
 
 const DomainResultsDisplay: React.FC<{ results: DomainCheckResults }> = ({ results }) => (
@@ -47,9 +45,7 @@ export const DomainChecker: React.FC<DomainCheckerProps> = ({ allNames }) => {
     setError(null);
     setResults(null);
     try {
-      // FIX: The `allNames` array, derived from an API response, might contain non-string values, causing a type error.
-      // Explicitly mapping each element to a string ensures `uniqueNames` is a `string[]`, which is required by `checkDomains`.
-      const uniqueNames = Array.from(new Set(allNames.map(name => String(name)))).slice(0, 25);
+      const uniqueNames = Array.from(new Set(allNames)).slice(0, 25);
       const tldList = tlds.split(',').map(s => s.trim().replace(/^\./, '')).filter(Boolean).slice(0, 5);
       if (uniqueNames.length === 0 || tldList.length === 0) {
         throw new Error('No names or TLDs to check.');
