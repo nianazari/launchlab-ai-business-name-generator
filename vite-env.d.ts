@@ -1,4 +1,3 @@
-/// <reference types="vite/client" />
 
 // FIX: Replaced `declare var process` with an augmentation of the NodeJS.ProcessEnv
 // interface. This prevents the "Cannot redeclare" error and correctly types `process.env`
