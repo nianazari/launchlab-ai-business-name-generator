@@ -47,7 +47,8 @@ export async function generateBusinessNames(niche: string): Promise<NameGenerati
   const userPrompt = `My business niche is: "${niche}"`;
 
   try {
-    // FIX: Per coding guidelines, the API key must be obtained from process.env.API_KEY.
+    // FIX: Per coding guidelines, initialize GoogleGenAI directly with `process.env.API_KEY`
+    // and assume the environment variable is correctly configured.
     const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
     const response = await ai.models.generateContent({
@@ -79,7 +80,8 @@ export async function generateBusinessNames(niche: string): Promise<NameGenerati
   } catch (e) {
     console.error('Error calling Gemini API:', e);
     if (e instanceof Error && e.message.includes('API key')) {
-        throw new Error('Your API key is missing or invalid. Please ensure it is set correctly in your deployment environment.');
+        // Re-throw the specific API key error to be displayed to the user.
+        throw new Error(e.message);
     }
     throw new Error('Failed to generate names. The API may be busy or an error occurred.');
   }
