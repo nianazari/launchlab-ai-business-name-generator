@@ -1,0 +1,5 @@
+{
+  "name": "LaunchLab AI Business Name Generator",
+  "description": "An AI-powered assistant to generate creative, available-sounding business names and taglines based on your industry or niche. It also includes a heuristic domain availability checker.",
+  "requestFramePermissions": []
+}
