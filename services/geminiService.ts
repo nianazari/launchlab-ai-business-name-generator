@@ -1,13 +1,6 @@
-
 import { GoogleGenAI, Type } from '@google/genai';
 import type { NameGenerationResponse } from '../types';
 import { SYSTEM_INSTRUCTION } from '../constants';
-
-if (!process.env.API_KEY) {
-    throw new Error("API_KEY environment variable not set");
-}
-
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 const responseSchema = {
   type: Type.OBJECT,
@@ -54,6 +47,11 @@ export async function generateBusinessNames(niche: string): Promise<NameGenerati
   const userPrompt = `My business niche is: "${niche}"`;
 
   try {
+    // Initialize the AI client here, just before it's needed.
+    // This prevents a crash on app load if the API key is missing.
+    // FIX: Use process.env.API_KEY as per the coding guidelines.
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash',
       contents: userPrompt,
@@ -82,6 +80,9 @@ export async function generateBusinessNames(niche: string): Promise<NameGenerati
     return data as NameGenerationResponse;
   } catch (e) {
     console.error('Error calling Gemini API:', e);
+    if (e instanceof Error && e.message.includes('API key')) {
+        throw new Error('Your API key is missing or invalid. Please check your environment variables.');
+    }
     throw new Error('Failed to generate names. The API may be busy or an error occurred.');
   }
 }
